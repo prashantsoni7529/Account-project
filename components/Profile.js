@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import ProfileForm from './ProfileForm';
 
 export default function Profile() {
   return (
     <View style={styles.container}>
-      <Text>This is my Profile Screen</Text>
-      <StatusBar style="auto" />
+     <ProfileForm/>
     </View>
   );
 }
