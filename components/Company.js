@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import CompanyForm from './CompanyForm';
 
 export default function Company() {
   return (
     <View style={styles.container}>
-      <Text>This is my company Screen</Text>
-      <StatusBar style="auto" />
+      <CompanyForm/>
     </View>
   );
 }

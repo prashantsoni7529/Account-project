@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import SalesForm from './SalesForm';
 
 export default function Sales() {
   return (
     <View style={styles.container}>
-      <Text>This is my Sales Screen</Text>
-      <StatusBar style="auto" />
+      <SalesForm/>
     </View>
   );
 }

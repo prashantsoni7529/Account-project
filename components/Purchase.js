@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import PurchaseForm from './PurchaseForm';
 
 export default function Purchase() {
   return (
     <View style={styles.container}>
-      <Text>This is my Purchase Screen</Text>
-      <StatusBar style="auto" />
+      <PurchaseForm/>
     </View>
   );
 }

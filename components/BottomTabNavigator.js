@@ -16,7 +16,7 @@ const BottomTabNavigator = () => {
   return (
     <NavigationContainer>
     <Tab.Navigator
-      tabBarOptions={{
+      screenOptions={{
         activeTintColor: '#0088cc',
         inactiveTintColor: 'gray',
         style: styles.tabBar,
