@@ -14,6 +14,10 @@ const Form = () => {
 //   const [Invoice, setInvoice] = useState('');
   const [showPicker, setShowPicker] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+  const [bill_party, set_bill_to_party] = useState('');
+  const [bill_party_state, set_bill_party_state] = useState('');
+  const [ship_party, set_ship_to_party] = useState('');
+  const [ship_party_state, set_ship_party_state] = useState('');
 
 
   const onChange = (event, selectedDate) => {
@@ -52,7 +56,22 @@ const Form = () => {
         <Text style={styles.label}>GST Number:</Text>
         <TextInput style={styles.input} value={v_gst} onChangeText={set_v_gst} />
       </View>
-
+      <View style={styles.row}>
+        <Text style={styles.label}>Bill to Party:</Text>
+        <TextInput style={styles.input} value={bill_party} onChangeText={set_bill_to_party} />
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Bill to Party State:</Text>
+        <TextInput style={styles.input} value={bill_party_state} onChangeText={set_bill_party_state} />
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Ship to Party:</Text>
+        <TextInput style={styles.input} value={ship_party} onChangeText={set_ship_to_party} />
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Ship to Party State:</Text>
+        <TextInput style={styles.input} value={ship_party_state} onChangeText={set_ship_party_state} />
+      </View>
       <View style={styles.row}>
         <Text style={styles.label}>Taxable Value:</Text>
         <TextInput  style={styles.input} value={tax_val} onChangeText={set_tax_val} />
