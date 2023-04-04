@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import PurchaseForm from './PurchaseForm';
+import PurchaseScreen from './PurchaseList';
 
 export default function Purchase() {
   return (
     <View style={styles.container}>
-      <PurchaseForm/>
+      {/* <PurchaseForm/> */}
+      <PurchaseScreen/>
     </View>
   );
 }
@@ -14,7 +15,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+   
+    borderWidth:8,
+    borderColor:"#ded5d5",
+    // borderRadius:15,
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
 });
