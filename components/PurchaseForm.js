@@ -46,6 +46,7 @@ const Form = () => {
   
 
   return (
+    <>
     <View style={styles.container}>
         <View style={styles.row}>
             <Text style={styles.label}>Vendor:</Text>
@@ -81,10 +82,9 @@ const Form = () => {
         <TextInput  style={styles.input} value={invoice_val} onChangeText={set_invoice_val} />
       </View>
       <View style={styles.row}>
-      {/* <Text>Select GST % :</Text> */}
       <Text style={styles.label}>  GST % : {selectedOption}</Text>
       <Dropdown style={styles.input} options={options} defaultOption={selectedOption} onSelect={handleOptionSelect} />
-    </View>
+      </View>
     <View style={styles.row}>
         <Text style={styles.label}>Invoice Date:</Text>
         <TouchableOpacity onPress={showDatepicker}>
@@ -102,15 +102,11 @@ const Form = () => {
       )}
         <TextInput placeholder="Selected Date" style={styles.input} value={Invoice_Date.toLocaleDateString()} />
       </View>
-      {/* <View style={styles.row}>
-        <Text style={styles.label}>Invoice:</Text>
-        <TextInput style={styles.input} value={Invoice} onChangeText={setInvoice} />
-      </View> */}
-      
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
+        <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
     </View>
+    </>
   );
 };
 

@@ -1,71 +1,114 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity,ScrollView, StyleSheet } from 'react-native';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    TextInput,
+    FlatList,
+    
+  } from 'react-native';
+import React, {useRef, useState} from 'react';
 
-const Dropdown = ({ options, defaultOption, onSelect }) => {
-  const [showOptions, setShowOptions] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(defaultOption);
-
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
-    setShowOptions(false);
-    onSelect(option);
+ 
+  const Dropdown = (props) => {
+    const [search, setSearch] = useState('');
+    const [clicked, setClicked] = useState(false);
+    const [data, setData] = useState(props.val_data);
+    const [selectedState, setSelectedState] = useState('');
+    const searchRef = useRef();
+    const onSearch = search => {
+      if (search !== '') {
+        let tempData = data.filter(item => {
+          return item.value.toLowerCase().indexOf(search.toLowerCase()) > -1;
+        });
+        setData(tempData);
+      } else {
+        setData(props.val_data);
+      }
+    };
+    return (
+      <View style={{flex: 1}}>
+        <TouchableOpacity
+          style={{
+            backgroundColor:'red',
+            width: '90%',
+            height: 50,
+            borderRadius: 10,
+            borderWidth: 0.5,
+            alignSelf: 'center',
+            marginTop: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingLeft: 15,
+            paddingRight: 15,
+          }}
+          onPress={() => {
+            setClicked(!clicked);
+          }}>
+          <Text style={{fontWeight:'600'}}>
+            {selectedState == '' ? 'Select State' : selectedState}
+          </Text>
+        </TouchableOpacity>
+        {clicked ? (
+          <View
+            style={{
+              elevation: 5,
+              marginTop: 20,
+              height: 300,
+              alignSelf: 'center',
+              width: '90%',
+              backgroundColor: '#fff',
+              borderRadius: 10,
+            }}>
+            <TextInput
+              placeholder="Search.."
+              value={search}
+              ref={searchRef}
+              onChangeText={txt => {
+                onSearch(txt);
+                setSearch(txt);
+              }}
+              style={{
+                width: '90%',
+                height: 50,
+                alignSelf: 'center',
+                borderWidth: 0.2,
+                borderColor: '#8e8e8e',
+                borderRadius: 7,
+                marginTop: 20,
+                paddingLeft: 20,
+              }}
+            />
+            
+            <FlatList
+            nestedScrollEnabled
+              data={data}
+              renderItem={({item, index}) => {
+                return (
+                  <TouchableOpacity
+                    style={{
+                      width: '85%',
+                      alignSelf: 'center',
+                      height: 50,
+                      justifyContent: 'center',
+                      borderBottomWidth: 0.5,
+                      borderColor: '#8e8e8e',
+                    }}
+                    onPress={() => {
+                      setSelectedState(item.value);
+                      setClicked(!clicked);
+                      onSearch('');
+                      setSearch('');
+                    }}>
+                    <Text style={{fontWeight: '600'}}>{item.value}</Text>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          </View>
+        ) : null}
+      </View>
+    );
   };
-
-  return (
-    <View style={styles.dropdownContainer}>
-      <TouchableOpacity
-        style={styles.selectedOption}
-        onPress={() => setShowOptions(!showOptions)}
-      >
-        <Text>{selectedOption}</Text>
-      </TouchableOpacity>
-      {showOptions && (
-         
-        <View style={styles.optionsContainer}>
-        <ScrollView style={{ maxHeight: 150 }}>
-          {options.map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.option}
-              onPress={() => handleOptionSelect(option)}
-            >
-              <Text>{option}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-        </View>
-        
-      )}
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  dropdownContainer: {
-    position: 'relative',
-    width: '40%',
-    backgroundColor:'lightblue'
-  },
-  selectedOption: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-  },
-  optionsContainer: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    backgroundColor: '#fff',
-    zIndex: 1,
-  },
-  option: {
-    padding: 10,
-  },
-});
-
-export default Dropdown;
+  
+  export default Dropdown;
