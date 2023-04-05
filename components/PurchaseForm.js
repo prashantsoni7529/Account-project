@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StateData from './StatesData';
 import {GstData} from './GstData';
-
+import GstDataList from './GstDatalist';
 // import Dropdown from './Dropdown';
 import Dropdown  from './Dropdown';
 
@@ -125,6 +125,7 @@ const Form = (props) => {
       </View>
       <View style={styles.row}>
       <Text style={styles.label}> Select GST % : </Text>
+      <GstDataList val_data={GstData} />
       {/* <Dropdown  val_data ={GstData}/> */}
       </View>
       <View style={styles.row}>

@@ -2,26 +2,17 @@ import {
     View,
     Text,
     TouchableOpacity,
-    TextInput,
     FlatList,
-    LogBox
     
   } from 'react-native';
-import React, {useRef,useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 
  
-  const Dropdown = (props) => {
-    const [search, setSearch] = useState('');
+  const GstDLL = (props) => {
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState(props.val_data);
     const [selectedState, setSelectedState] = useState('');
     const searchRef = useRef();
-
-
-    useEffect(() => {
-      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, [])
-
     const onSearch = search => {
       if (search !== '') {
         let tempData = data.filter(item => {
@@ -53,7 +44,7 @@ import React, {useRef,useEffect, useState} from 'react';
             setClicked(!clicked);
           }}>
           <Text style={{fontWeight:'600'}}>
-            {selectedState == '' ? 'Select State' : selectedState}
+            {selectedState == '' ? 'Select GST' : selectedState}
           </Text>
         </TouchableOpacity>
         {clicked ? (
@@ -67,25 +58,6 @@ import React, {useRef,useEffect, useState} from 'react';
               backgroundColor: '#fff',
               borderRadius: 10,
             }}>
-            <TextInput
-              placeholder="Search.."
-              value={search}
-              ref={searchRef}
-              onChangeText={txt => {
-                onSearch(txt);
-                setSearch(txt);
-              }}
-              style={{
-                width: '90%',
-                height: 50,
-                alignSelf: 'center',
-                borderWidth: 0.2,
-                borderColor: '#8e8e8e',
-                borderRadius: 7,
-                marginTop: 20,
-                paddingLeft: 20,
-              }}
-            />
             
             <FlatList
             nestedScrollEnabled
@@ -105,7 +77,6 @@ import React, {useRef,useEffect, useState} from 'react';
                       setSelectedState(item.value);
                       setClicked(!clicked);
                       onSearch('');
-                      setSearch('');
                     }}>
                     <Text style={{fontWeight: '600'}}>{item.value}</Text>
                   </TouchableOpacity>
@@ -118,4 +89,4 @@ import React, {useRef,useEffect, useState} from 'react';
     );
   };
   
-  export default Dropdown;
+  export default GstDLL;
