@@ -1,45 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import { ProfileContext } from '../contexts/Context';
 
 const EditableField = ({ label, value, onChange }) => {
-  const [editing, setEditing] = useState(false);
+  // const [editing, setEditing] = useState(false);
 
-  const handleSave = () => {
-    setEditing(false);
-  };
 
-  if (editing) {
-    return (
-      <View style={styles.editableField}>
-        <Text style={styles.label}>{label}</Text>
-        <TextInput
-          style={styles.input}
-          value={value}
-          onChangeText={onChange}
-        />
-        <TouchableOpacity onPress={handleSave}>
-          <Text style={styles.saveButton}>Save</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+
+  // const handleSave = () => {
+  //   setEditing(false);
+  // };
+
+  // if (editing) {
+  //   return (
+  //     <View style={styles.editableField}>
+  //       <Text style={styles.label}>{label}</Text>
+  //       <TextInput
+  //         style={styles.input}
+  //         value={value}
+  //         onChangeText={onChange}
+  //       />
+  //       <TouchableOpacity onPress={handleSave}>
+  //         <Text style={styles.saveButton}>Save</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // }
 
   return (
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
       <Text style={styles.value}>{value}</Text>
-      <TouchableOpacity onPress={() => setEditing(true)}>
+      {/* <TouchableOpacity onPress={() => setEditing(true)}>
         <Text style={styles.editButton}>✏️</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
 
 const EditScreen = () => {
-  const [Name, setName] = useState('Acme Inc.');
-  const [ContactNo, setContactNo] = useState('123456789');
-  const [Email, setEmail] = useState('psoni@gmail.com');
+  const [Name, setName] = useState('');
+  const [ContactNo, setContactNo] = useState('');
+  const [Email, setEmail] = useState('');
+  const [Role, setRole] = useState('');
+
+
+
+  const profileData = useContext(ProfileContext);
+  console.log("profileData data in context is ", profileData);
 
   return (
     <View style={styles.container}>
@@ -49,12 +58,13 @@ const EditScreen = () => {
         source={{ uri: 'https://i.pravatar.cc/150' }}
         containerStyle={styles.avatar}
       />
-      <EditableField label="Name" value={Name} onChange={setName} />
-      <EditableField label="Contact No." value={ContactNo} onChange={setContactNo} />
-      <EditableField label="Email" value={Email} onChange={setEmail} />
-      <TouchableOpacity style={styles.saveContainer}>
+      <EditableField label="Name" value={profileData.name} onChange={setName} />
+      <EditableField label="Contact No." value={profileData.mobile} onChange={setContactNo} />
+      <EditableField label="Email" value={profileData.email} onChange={setEmail} />
+      <EditableField label="Role" value={profileData.role}  onChange={setRole} />
+      {/* <TouchableOpacity style={styles.saveContainer}>
         <Text style={styles.saveButton}>Save All</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

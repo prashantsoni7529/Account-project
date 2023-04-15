@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,20 +11,20 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import PurchaseForm from './PurchaseForm';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {PurchaseContext} from '../contexts/Context';
 
 
 
 
 
-
-const DATA=[
-    {id: '1',company_name:'Purchase1',Gst_No:"09AFBFSSFSKSF57",GST_rate:'12%',field_inv:'inv 2021',date:'01/14/2021',bill:"28600", field_extra:'33745'},
-    {id: '2',company_name:'Purchase2 ',Gst_No:"09AFBFSSFSKSF57",GST_rate:'10%',field_inv:'inv 2021',date:'01/14/2021',bill:"28600", field_extra:'33745'},
-    {id: '3',company_name:'Purchase3',Gst_No:"09AFBFSSFSKSF57",GST_rate:'8%',field_inv:'inv 2021',date:'01/14/2021',bill:"28600", field_extra:'33745'},
-    {id: '4',company_name:'Purchase4',Gst_No:"09AFBFSSFSKSF57",GST_rate:'11%',field_inv:'inv 2021',date:'01/14/2021',bill:"28600", field_extra:'33745'},
-    {id: '5',company_name:'Purchase5 ',Gst_No:"09AFBFSSFSKSF57",GST_rate:'12%',field_inv:'inv 2021',date:'01/14/2021',bill:"28600", field_extra:'33745'},
-    {id: '6',company_name:'Purchase6',Gst_No:"09AFBFSSFSKSF57",GST_rate:'12%',field_inv:'inv 2021',date:'01/14/2021',bill:"28600", field_extra:'33745'},
-]
+// const DATA=[
+//     {purchase_bill_number: '1',vendor_name:'Purchase1',vendor_gst:"09AFBFSSFSKSF57",tax_rate:'12%',invoice_date:'01/14/2021',taxable_value:"28600", invoice_value:'33745'},
+//     {purchase_bill_number: '2',vendor_name:'Purchase2 ',vendor_gst:"09AFBFSSFSKSF57",tax_rate:'10%',invoice_date:'01/14/2021',taxable_value:"28600", invoice_value:'33745'},
+//     {purchase_bill_number: '3',vendor_name:'Purchase3',vendor_gst:"09AFBFSSFSKSF57",tax_rate:'8%',invoice_date:'01/14/2021',taxable_value:"28600", invoice_value:'33745'},
+//     {purchase_bill_number: '4',vendor_name:'Purchase4',vendor_gst:"09AFBFSSFSKSF57",tax_rate:'11%',invoice_date:'01/14/2021',taxable_value:"28600", invoice_value:'33745'},
+//     {purchase_bill_number: '5',vendor_name:'Purchase5 ',vendor_gst:"09AFBFSSFSKSF57",tax_rate:'12%',invoice_date:'01/14/2021',taxable_value:"28600", invoice_value:'33745'},
+//     {purchase_bill_number: '6',vendor_name:'Purchase6',vendor_gst:"09AFBFSSFSKSF57",tax_rate:'12%',invoice_date:'01/14/2021',taxable_value:"28600", invoice_value:'33745'},
+// ]
 
 // const DATA = [
 //   {
@@ -52,14 +52,16 @@ const PurchaseScreen = () => {
   const [item_data,setitem_data] = useState({});
   const [addPurchase, setAddPurchase] = useState(true);
 
+  const DATA = useContext(PurchaseContext);
+  console.log("purchaseData data in context is ",DATA);
 
   const onPressEditbtn = (data) => {
-    selected_item_data(data.id);
-    seteditItemId(data.id);
+    selected_item_data(data.purchase_bill_number);
+    seteditItemId(data.purchase_bill_number);
     setIsEditing(true);
     setAddPurchase(false);
 
-   console.debug('edit button is clicked',data.id,data.company_name);
+   console.debug('edit button is clicked',data.purchase_bill_number,data.vendor_name);
   };
   console.debug('outside function ',editItemId , isEditing ,item_data);
 
@@ -75,17 +77,17 @@ const PurchaseScreen = () => {
              <TouchableOpacity> 
               <View style={styles.item}>
                 <View style={styles.item_data}>
-                  <Text style={styles.name_and_icon_style}>{item.company_name}</Text>
-                  <Text style={styles.item_content}>{item.Gst_No}</Text>
-                  <Text style={styles.item_content}>{item.GST_rate}</Text>
+                  <Text style={styles.name_and_icon_style}>{item.vendor_name}</Text>
+                  <Text style={styles.item_content}>{item.vendor_gst}</Text>
+                  <Text style={styles.item_content}>{item.tax_rate}</Text>
                 </View>
                 <View style={styles.item_data}>
-                  <Text style={styles.item_content}>{item.field_inv}</Text>
-                  <Text style={styles.item_content}>{item.date}</Text>
+                  <Text style={styles.item_content}>{item.purchase_bill_number}</Text>
+                  <Text style={styles.item_content}>{item.invoice_date}</Text>
                 </View>
                 <View style={styles.item_data}>
-                  <Text style={styles.item_content}>{item.bill}</Text>
-                  <Text style={styles.item_content}>{item.field_extra}</Text>
+                  <Text style={styles.item_content}>{item.taxable_value}</Text>
+                  <Text style={styles.item_content}>{item.invoice_value}</Text>
                 </View>
                 <View style={[styles.item_edit,styles.name_and_icon_style]}>
                   <TouchableOpacity onPress={()=>onPressEditbtn(item)}>
@@ -105,10 +107,10 @@ const PurchaseScreen = () => {
     setAddPurchase(false);
   }
 
-  const selected_item_data = (id) =>{
+  const selected_item_data = (purchase_bill_number) =>{
     for(let i=0;i<DATA.length;i++){
-    // console.debug('in selected_item_data is ',DATA[i],'check bool val is',DATA[i].id === editItemId,DATA[i].id , editItemId);
-      if(DATA[i].id === id){
+    // console.debug('in selected_item_data is ',DATA[i],'check bool val is',DATA[i].purchase_bill_number === editItemId,DATA[i].purchase_bill_number , editItemId);
+      if(DATA[i].purchase_bill_number === purchase_bill_number){
         setitem_data(DATA[i]);
         console.debug('collecting data is ',item_data);
       }
@@ -129,7 +131,7 @@ const PurchaseScreen = () => {
         <FlatList
           data={DATA}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.purchase_bill_number}
         />
       )}
     </>

@@ -12,17 +12,7 @@ import React, {useRef, useState} from 'react';
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState(props.val_data);
     const [selectedState, setSelectedState] = useState('');
-    const searchRef = useRef();
-    const onSearch = search => {
-      if (search !== '') {
-        let tempData = data.filter(item => {
-          return item.value.toLowerCase().indexOf(search.toLowerCase()) > -1;
-        });
-        setData(tempData);
-      } else {
-        setData(props.val_data);
-      }
-    };
+    
     return (
       <View style={{flex: 1}}>
         <TouchableOpacity
@@ -75,8 +65,8 @@ import React, {useRef, useState} from 'react';
                     }}
                     onPress={() => {
                       setSelectedState(item.value);
+                      props.get_tax_rate_value(item.value);
                       setClicked(!clicked);
-                      onSearch('');
                     }}>
                     <Text style={{fontWeight: '600'}}>{item.value}</Text>
                   </TouchableOpacity>

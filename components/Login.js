@@ -1,13 +1,55 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const Login = () => {
+const Login = ({logInData}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
 
-  const handleLogin = () => {
+//Login creds
+// username: "singhsourabh074@gmail.com",
+// pass: "sourabhsingh282"
+
+  const handleLogin = async () => {
     // Handle login logic here
-    console.log("handle Login is clicked");
+    console.log("Email is ", email, "Pass is ", password);
+    if (!email.trim() || !password.trim()) {
+      alert("Email and password can't be empty");
+    }
+    else {
+      try {
+        let response = await fetch(
+          'http://54.82.231.80:3117/affivo/login', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: email,
+            pass: password
+            
+          }
+          )
+        });
+        let json = await response.json();
+        console.log("json  returned is ", json);
+        if(json.hasOwnProperty('data') && json['data'] !== ""){
+          alert("You are logged in");
+          logInData(json);
+          
+        }
+        else{
+          alert("Username and password are not correct");
+        }
+        
+        // return json.movies;
+      } catch (error) {
+        console.error(error);
+        alert("Please check your network connection");
+      }
+    }
+
   };
 
   return (
@@ -18,6 +60,7 @@ const Login = () => {
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+        required
       />
       <TextInput
         style={styles.input}
@@ -25,6 +68,7 @@ const Login = () => {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        required
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>

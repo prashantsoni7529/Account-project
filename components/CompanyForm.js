@@ -1,21 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Image } from 'react-native-elements';
+import {CompanyContext} from '../contexts/Context';
 
 const CompanyForm = () => {
+
+  const companyData = useContext(CompanyContext);
+
   return (
     <View style={styles.container}>
       <Image
         source={{ uri: 'https://via.placeholder.com/150x150.png' }}
         style={styles.logo}
       />
+
       <Text style={styles.label}>Company Name</Text>
-      <Text style={styles.value}>ABC Corporation</Text>
+      <Text style={styles.value}>{companyData.company_name}</Text>
       <Text style={styles.label}>GST No.</Text>
-      <Text style={styles.value}>1234567890</Text>
+      <Text style={styles.value}>{companyData.gst_number}</Text>
       <Text style={styles.label}>Address</Text>
       <Text style={styles.value}>
-        123, Main Street, New York, NY 10001
+        {companyData.company_address}
       </Text>
     </View>
   );
@@ -23,7 +28,7 @@ const CompanyForm = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     justifyContent: 'center',
     padding: 20,
   },

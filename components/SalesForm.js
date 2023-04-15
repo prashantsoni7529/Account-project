@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text,TextInput, StyleSheet, TouchableOpacity ,ScrollView} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -52,7 +52,9 @@ const Form = (props) => {
     setShowPicker(true);
   };
 
-  
+  const getTaxRateValue = (val) => {
+    setInvoice(val);
+  }
 
 
   const handleSubmit = () => {
@@ -62,6 +64,25 @@ const Form = (props) => {
     props.cancel();
 
   }
+
+  
+
+  useEffect(()=>{
+    let final_amount;
+    if(Invoice && tax_val ){
+      final_amount = "";
+    console.debug("Invoice  coming is ",Invoice , " tax_val is ",tax_val);
+
+      final_amount = ((100 + parseFloat(Invoice)) * parseInt(tax_val))/100;
+      final_amount = String(final_amount);
+      console.debug("final_amount coming is ",final_amount);
+      set_invoice_val(final_amount);
+    }
+    else{
+      set_invoice_val("");
+    }
+
+  },[tax_val,Invoice]);
 
   const options = ['Non GST','0%', '0.1%', 'O.25%','1%','1.5%','3%'];
   // let data = [{
@@ -73,9 +94,7 @@ const Form = (props) => {
   // }];
 
 
-  // const handleOptionSelect = (option) => {
-  //   setSelectedOption(option);
-  // };
+
   
 
   return (
@@ -127,20 +146,20 @@ const Form = (props) => {
       </View>
       <View style={styles.row}>
       <Text style={styles.label}> Select GST % : </Text>
-      <GstDataList val_data={GstData} />
+      <GstDataList val_data={GstData} get_tax_rate_value={getTaxRateValue}/>
       {/* <Dropdown  val_data ={GstData}/> */}
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Taxable Value:</Text>
-        <TextInput  style={styles.input} value={tax_val} onChangeText={set_tax_val} />
+        <TextInput  style={styles.input} value={tax_val} keyboardType='numeric' onChangeText={set_tax_val}  />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Invoice:</Text>
-        <TextInput style={styles.input} value={Invoice} onChangeText={setInvoice} />
+        <Text style={styles.label}>Tax Rate:</Text>
+        <TextInput style={styles.input} editable={false} value={Invoice} onChangeText={setInvoice} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Invoice Value:</Text>
-        <TextInput  style={styles.input} value={invoice_val} onChangeText={set_invoice_val} />
+        <Text style={styles.label}>Total Amount:</Text>
+        <TextInput  style={styles.input} editable={false} value={invoice_val}  />
       </View>
      
 
