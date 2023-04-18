@@ -14,7 +14,7 @@ import React, {useRef,useEffect, useState} from 'react';
     const [search, setSearch] = useState('');
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState(props.val_data);
-    const [selectedState, setSelectedState] = useState('');
+    const [selectedState, setSelectedState] = useState(props.state);
     const searchRef = useRef();
 
 
@@ -54,6 +54,7 @@ import React, {useRef,useEffect, useState} from 'react';
           }}>
           <Text style={{fontWeight:'600'}}>
             {selectedState == '' ? 'Select State' : selectedState}
+           { props.stateSelected(selectedState)}
           </Text>
         </TouchableOpacity>
         {clicked ? (

@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     // paddingTop: 10,
     // paddingBottom:10,
     padding:5,
-    marginVertical: '-3%',
+    marginTop:'-6%',
     flex:1,
     flexDirection:'row',
     

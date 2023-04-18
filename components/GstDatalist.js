@@ -11,7 +11,7 @@ import React, {useRef, useState} from 'react';
   const GstDLL = (props) => {
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState(props.val_data);
-    const [selectedState, setSelectedState] = useState('');
+    const [selectedState, setSelectedState] = useState(props.selectedRate);
     
     return (
       <View style={{flex: 1}}>

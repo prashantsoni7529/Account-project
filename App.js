@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Login from './components/Login';
 import NavTabs from './components/BottomTabNavigator';
 // import { CollectCompanyData, CollectSalesData, CollectPurchaseData } from './Apicalls';
-import {CompanyContext , ProfileContext , PurchaseContext , SalesContext} from './contexts/Context';
+import {CompanyContext , ProfileContext , PurchaseContext , SalesContext ,AuthContext} from './contexts/Context';
 
 
 export default function App() {
@@ -39,8 +39,8 @@ export default function App() {
       const response = await Promise.all([
         fetch('http://54.82.231.80:3117/affivo/organizations', payload),
         fetch('http://54.82.231.80:3117/affivo/users', payload),
-        fetch('http://54.82.231.80:3117/affivo/sales', payload),
-        fetch('http://54.82.231.80:3117/affivo/purchases', payload),
+        fetch('http://54.82.231.80:3117/affivo/sales?month=current&pageNumber=1', payload),
+        fetch('http://54.82.231.80:3117/affivo/purchases?month=current&pageNumber=1', payload),
       ]);
       const responseData = await Promise.all(response.map(res => res.json()));
       setCompanyData(responseData[0].data);
@@ -121,9 +121,11 @@ export default function App() {
       {isLoggedIn ?
        (<CompanyContext.Provider value={companyData}>
         <ProfileContext.Provider value={userData}>
-        <SalesContext.Provider value={SalesData}>
+        <SalesContext.Provider value={{SalesData,setSalesData}}>
         <PurchaseContext.Provider value={PurchaseData}>
+        <AuthContext.Provider value={authToken}>
         <NavTabs />
+        </AuthContext.Provider>
         </PurchaseContext.Provider>
         </SalesContext.Provider>
         </ProfileContext.Provider>

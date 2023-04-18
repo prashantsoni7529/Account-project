@@ -12,6 +12,9 @@ import { Ionicons } from '@expo/vector-icons';
 import SalesForm from './SalesForm';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {SalesContext} from '../contexts/Context';
+import {CollectSalesData} from '../Apicalls';
+import {AuthContext} from '../contexts/Context';
+
 
 
 
@@ -31,9 +34,13 @@ const SalesScreen = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [item_data,setitem_data] = useState({});
   const [addSale, setAddSale] = useState(true);
+  
 
-  const DATA = useContext(SalesContext);
+  const {SalesData,setSalesData} = useContext(SalesContext);
+  const DATA = SalesData;
   console.log("sales data in context is ",DATA);
+
+  const authData = useContext(AuthContext);
 
   const onPressEditbtn = (data) => {
     selected_item_data(data.sales_bill_number);
@@ -45,7 +52,10 @@ const SalesScreen = () => {
   };
   console.debug('outside function ',editItemId , isEditing ,item_data);
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = async() => {
+    let sale_data =[];
+    sale_data = await CollectSalesData(authData);
+    setSalesData(sale_data);
     setIsEditing(false);
     seteditItemId(null);
     setAddSale(true);
@@ -155,7 +165,7 @@ const styles = StyleSheet.create({
     // paddingTop: 10,
     // paddingBottom:10,
     padding:5,
-    marginVertical: '-3%',
+    marginTop:'-6%',
     flex:1,
     flexDirection:'row',
     
