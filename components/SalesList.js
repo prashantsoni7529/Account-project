@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,14 +6,16 @@ import {
   SafeAreaView,
   FlatList,
   StatusBar,
-  TouchableOpacity,
+  TouchableOpacity, Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import SalesForm from './SalesForm';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {SalesContext} from '../contexts/Context';
-import {CollectSalesData} from '../Apicalls';
-import {AuthContext} from '../contexts/Context';
+import { SalesContext } from '../contexts/Context';
+import { CollectSalesData, deleteSale } from '../Apicalls';
+import { AuthContext } from '../contexts/Context';
+import MonthsDropDown from './GstDatalist';
+import { Months } from "./MonthData";
 
 
 
@@ -30,17 +32,48 @@ import {AuthContext} from '../contexts/Context';
 
 
 const SalesScreen = () => {
-  const [editItemId,seteditItemId] = useState(null);
+  const [editItemId, seteditItemId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [item_data,setitem_data] = useState({});
+  const [item_data, setitem_data] = useState({});
   const [addSale, setAddSale] = useState(true);
-  
+  const [monthVal, setMonthVal] = useState("Select Month");
 
-  const {SalesData,setSalesData} = useContext(SalesContext);
+
+  const { SalesData, setSalesData } = useContext(SalesContext);
   const DATA = SalesData;
-  console.log("sales data in context is ",DATA);
+  console.log("sales data in context is ", DATA);
 
   const authData = useContext(AuthContext);
+
+  // Define a function to display the confirmation dialog
+  const displayConfirmationDialog = (data) => {
+    Alert.alert(
+      'Confirm',
+      'Are you sure you want to delete this record ?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Confirm',
+          onPress: () => onPressDeletebtn(data)
+        }
+      ]
+    );
+  }
+
+  const onPressDeletebtn = async (data) => {
+    console.log("Pressing delete btn", data.sales_id, typeof (data.sales_id));
+    let inv_no = data.sales_id;
+    let sale_data = [];
+    console.log("Inside if of delete dtn ", inv_no);
+    await deleteSale(inv_no);
+    sale_data = await CollectSalesData(authData);
+    setSalesData(sale_data);
+
+
+  }
 
   const onPressEditbtn = (data) => {
     selected_item_data(data.sales_bill_number);
@@ -48,12 +81,13 @@ const SalesScreen = () => {
     setIsEditing(true);
     setAddSale(false);
 
-   console.debug('edit button is clicked',data.sales_bill_number,data.customer_name);
+    console.debug('edit button is clicked', data.sales_bill_number, data.customer_name);
   };
-  console.debug('outside function ',editItemId , isEditing ,item_data);
+  console.debug('outside function ', editItemId, isEditing, item_data);
 
-  const handleCancelEdit = async() => {
-    let sale_data =[];
+
+  const handleCancelEdit = async () => {
+    let sale_data = [];
     sale_data = await CollectSalesData(authData);
     setSalesData(sale_data);
     setIsEditing(false);
@@ -62,58 +96,80 @@ const SalesScreen = () => {
   };
 
   const renderItem = ({ item }) => {
-      return(
-        <SafeAreaView style={styles.container}>
-             <TouchableOpacity> 
-              <View style={styles.item}>
-                <View style={styles.item_data}>
-                  <Text style={styles.name_and_icon_style}>{item.customer_name}</Text>
-                  <Text style={styles.item_content}>{item.customer_gst}</Text>
-                  <Text style={styles.item_content}>{item.tax_rate}</Text>
-                </View>
-                <View style={styles.item_data}>
-                  <Text style={styles.item_content}>{item.sales_bill_number}</Text>
-                  <Text style={styles.item_content}>{item.invoice_date}</Text>
-                </View>
-                <View style={styles.item_data}>
-                  <Text style={styles.item_content}>{item.taxable_value}</Text>
-                  <Text style={styles.item_content}>{item.invoice_value}</Text>
-                </View>
-                <View style={[styles.item_edit,styles.name_and_icon_style]}>
-                  <TouchableOpacity onPress={()=>onPressEditbtn(item)}>
-                  <Ionicons name="md-create" size={24} color={'#3b448f'}/>
-                  </TouchableOpacity>
-                </View>
-              </View>
-             </TouchableOpacity>
-          </SafeAreaView>
-      );
+    return (
+      <SafeAreaView style={styles.container}>
+        <TouchableOpacity>
+          <View style={styles.item}>
+            <View style={styles.item_data}>
+              <Text style={styles.name_and_icon_style}>{item.customer_name}</Text>
+              <Text style={styles.item_content}>{item.customer_gst}</Text>
+              <Text style={styles.item_content}>{item.tax_rate}</Text>
+            </View>
+            <View style={styles.item_data}>
+              <Text style={styles.item_content}>{item.sales_bill_number}</Text>
+              <Text style={styles.item_content}>{item.invoice_date}</Text>
+            </View>
+            <View style={styles.item_data}>
+              <Text style={styles.item_content}>{item.taxable_value}</Text>
+              <Text style={styles.item_content}>{item.invoice_value}</Text>
+            </View>
+            <View style={[styles.item_edit, styles.item_data, styles.name_and_icon_style]}>
+              <TouchableOpacity onPress={() => onPressEditbtn(item)}>
+                <Ionicons name="md-create" size={24} color={'#3b448f'} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => displayConfirmationDialog(item)}>
+                <Ionicons name='ios-trash' color={'#3b448f'} size={25} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
   };
 
-  const handleAddSales =() =>{
+  const handleAddSales = () => {
     console.debug('Adding sales button');
     setIsEditing(true);
     setitem_data({});
     setAddSale(false);
   }
+  const getMonthVal = (val) => {
+    setMonthVal(val);
+  }
 
-  const selected_item_data = (sales_bill_number) =>{
-    for(let i=0;i<DATA.length;i++){
-    // console.debug('in selected_item_data is ',DATA[i],'check bool val is',DATA[i].sales_bill_number === editItemId,DATA[i].sales_bill_number , editItemId);
-      if(DATA[i].sales_bill_number === sales_bill_number){
+  const sendSalesToAuditor = () => {
+    alert("Trying to send your selected month sales to auditor");
+  }
+
+  const selected_item_data = (sales_bill_number) => {
+    for (let i = 0; i < DATA.length; i++) {
+      // console.debug('in selected_item_data is ',DATA[i],'check bool val is',DATA[i].sales_bill_number === editItemId,DATA[i].sales_bill_number , editItemId);
+      if (DATA[i].sales_bill_number === sales_bill_number) {
         setitem_data(DATA[i]);
-        console.debug('collecting data is ',item_data);
+        console.debug('collecting data is ', item_data);
       }
     }
   }
-// Object.keys(objectName).length === 0
+  // Object.keys(objectName).length === 0
   return (
     <>
-    {addSale ? (
-    <View  style={{ flexDirection:'row-reverse',margin:10,alignItems:'center',gap:7}}>
-    <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddSales} />
-    <Text style={styles.plus_icon}>Add Sales</Text>
-    </View>):(<View></View>)}
+      {addSale ? (
+        <View style={{ flexDirection: 'row', margin: 10, alignItems: 'center', gap: 7 }}>
+          <TouchableOpacity style={{
+             backgroundColor: '#0080ff',
+             width: '35%',
+             height: 40,
+             borderRadius: 10,
+             alignItems: 'center',
+             justifyContent: 'center',
+          }} onPress={sendSalesToAuditor}>
+            <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
+
+          </TouchableOpacity>
+          <MonthsDropDown val_data={Months} get_value={getMonthVal} selectedVal={monthVal} />
+          <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddSales} />
+          <Text style={styles.plus_icon}>Add Sales</Text>
+        </View>) : (<View></View>)}
 
       {isEditing ? (
         <SalesForm data={item_data} cancel={handleCancelEdit} />
@@ -134,13 +190,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: StatusBar.currentHeight,
     marginHorizontal: 8,
-    
-   
+
+
   },
-  plus_icon:{
-    fontWeight:'bold',
+  plus_icon: {
+    fontWeight: 'bold',
     // fontSize:25,
-    color:'#3b448f',
+    color: '#3b448f',
 
     // backgroundColor:'#e6ebf2'
     // textAlign: 'right'
@@ -150,43 +206,43 @@ const styles = StyleSheet.create({
   item_content: {
     fontSize: 10,
   },
-  name_and_icon_style:{
-    fontWeight:'bold',
-    fontSize:15,
-    color:'#3b448f',
-    
+  name_and_icon_style: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: '#3b448f',
+
   },
   item: {
     // backgroundColor: '#a9c6ff',
-    borderColor:'#b0aea9',
-    borderWidth:2,
+    borderColor: '#b0aea9',
+    borderWidth: 2,
 
-    height:120,
+    height: 120,
     // paddingTop: 10,
     // paddingBottom:10,
-    padding:5,
-    marginTop:'-6%',
-    flex:1,
-    flexDirection:'row',
-    
+    padding: 5,
+    marginTop: '-6%',
+    flex: 1,
+    flexDirection: 'row',
+
     // alignItems:'flex-start',
     // alignItems:'center',
 
-    justifyContent:'space-between',
-    
+    justifyContent: 'space-between',
+
   },
- 
- 
-  
+
+
+
   item_data: {
     // backgroundColor:'green',
-    alignItems:'center',
-    justifyContent:'space-around',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
-  item_edit:{
+  item_edit: {
     // backgroundColor:'yellow',
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });
 

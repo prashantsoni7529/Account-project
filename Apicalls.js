@@ -86,11 +86,11 @@ export const AddNewSale = async (obj) => {
     let response = await fetch(
       'http://54.82.231.80:3117/affivo/sales', {
       method: 'POST',
-
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(obj),
 
     });
-    console.log("response is ",response);
+    // console.log("response is ",response);
     let json = await response.json();
     console.log("Adding sales json is", json);
     if (json['message'] === "Sales Invoice added Successfully" || json['code'] === '200') {
@@ -108,26 +108,59 @@ export const AddNewSale = async (obj) => {
   }
 }
 
-// export const AddNewSale = async (obj) => {
-//   const requestOptions = {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(obj)
-// };
-//   try {
-//       await fetch(
-//         'http://54.82.231.80:3117/affivo/sales', requestOptions)
-//           .then(response => {
-//               response.json()
-//                   .then(data => {
-//                       console.log("sales data new is ",data);
-//                       alert("New Sale added successfully"); 
-                      
-//                   });
-//           })
-//   }
-//   catch (error) {
-//       console.error("Error is",error);
-//   }
 
-// }
+//Delete Selected Sale 
+export const deleteSale = async(inv_no) => {
+  console.log("Inside delete sale inv_no is ",inv_no);
+  try {
+    let response = await fetch(
+      'http://54.82.231.80:3117/affivo/sales?invoiceNumber=' + inv_no, {
+      method: 'DELETE',
+    });
+    let json = await response.json();
+    console.log("Deleting sales json is", json);
+    if (json['message'] === "Sales Deleted successfully" || json['code'] === '200') {
+      console.log("Sale Deleted successfully");
+      alert("Your sale is deleted");
+    }
+    else {
+      alert("Sale not Deleted");
+    }
+
+    // return json.movies;
+  } catch (error) {
+    console.error("Error is ", error);
+    // throw error;
+  }
+  
+
+}
+
+//Update Selected Sale 
+export const updateSale = async(obj , inv_no) => {
+  console.log("Inside updateSale  is ",obj);
+  try {
+    let response = await fetch(
+      'http://54.82.231.80:3117/affivo/sales?invoiceNumber=' + inv_no, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(obj),
+    });
+    let json = await response.json();
+    console.log("Updating sales json is", json);
+    if (json['message'] === "Sales updated successfully" || json['code'] === '200') {
+      console.log("Sales updated successfully");
+      alert("Your sale is Updated");
+    }
+    else {
+      alert("Sale not updated");
+    }
+
+    // return json.movies;
+  } catch (error) {
+    console.error("Error is ", error);
+    // throw error;
+  }
+  
+
+}

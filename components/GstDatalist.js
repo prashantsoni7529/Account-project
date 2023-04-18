@@ -11,7 +11,7 @@ import React, {useRef, useState} from 'react';
   const GstDLL = (props) => {
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState(props.val_data);
-    const [selectedState, setSelectedState] = useState(props.selectedRate);
+    const [selectedState, setSelectedState] = useState(props.selectedVal);
     
     return (
       <View style={{flex: 1}}>
@@ -34,7 +34,7 @@ import React, {useRef, useState} from 'react';
             setClicked(!clicked);
           }}>
           <Text style={{fontWeight:'600'}}>
-            {selectedState == '' ? 'Select GST' : selectedState}
+            {selectedState == '' ? 'Select value' : selectedState}
           </Text>
         </TouchableOpacity>
         {clicked ? (
@@ -65,7 +65,7 @@ import React, {useRef, useState} from 'react';
                     }}
                     onPress={() => {
                       setSelectedState(item.value);
-                      props.get_tax_rate_value(item.value);
+                      props.get_value(item.value);
                       setClicked(!clicked);
                     }}>
                     <Text style={{fontWeight: '600'}}>{item.value}</Text>

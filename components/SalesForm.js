@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StateData from './StatesData';
 import { GstData } from './GstData';
 import GstDataList from './GstDatalist';
-import { AddNewSale } from '../Apicalls';
+import { AddNewSale ,updateSale } from '../Apicalls';
 
 // import Dropdown from './Dropdown';
 import Dropdown from './Dropdown';
@@ -13,7 +13,7 @@ import Dropdown from './Dropdown';
 // Invoice_Date,c_gst,v_name,bill_party,bill_party_state,ship_party,ship_party_state,tax_val,invoice_val,Invoice
 
 const Form = ({ data, cancel }) => {
-  let check_data_keys = Object.keys(data).length;
+  var check_data_keys = Object.keys(data).length;
   const [Invoice_Date, setInvoice_Date] = useState(check_data_keys ? (data.invoice_date) : new Date());
   // const [changedDate , setChangedDate] = useState("");
   const [c_gst, set_c_gst] = useState(check_data_keys ? data.customer_gst : "");
@@ -89,7 +89,13 @@ const Form = ({ data, cancel }) => {
         invoice_value: invoice_val,
       }
       console.log("prepare obj is ", obj);
-      await AddNewSale(obj);
+      if(check_data_keys && data.sales_id){ //Logic for saggregating update and add sale
+        await updateSale(obj , data.sales_id );
+      }
+      else{
+        await AddNewSale(obj);
+      }
+      
       // alert('Your....')
       cancel();
     }
@@ -172,7 +178,7 @@ const Form = ({ data, cancel }) => {
         </View>
         <View style={styles.row}>
           <Text style={styles.label}> Select GST % : </Text>
-          <GstDataList val_data={GstData} get_tax_rate_value={getTaxRateValue} selectedRate={Invoice} />
+          <GstDataList val_data={GstData} get_value={getTaxRateValue} selectedVal={Invoice} />
           {/* <Dropdown  val_data ={GstData}/> */}
         </View>
         <View style={styles.row}>
