@@ -56,7 +56,7 @@ export const CollectSalesData = async (token) => {
 export const CollectPurchaseData = async (token) => {
   try {
     let response = await fetch(
-      'http://54.82.231.80:3117/affivo/purchases', {
+      'http://54.82.231.80:3117/affivo/purchases?month=current&pageNumber=1', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -108,6 +108,35 @@ export const AddNewSale = async (obj) => {
   }
 }
 
+//Add new purchase
+export const AddNewPurchase = async (obj) => {
+  console.log("inside addnew purchase obj is ", JSON.stringify(obj));
+  try {
+    let response = await fetch(
+      'http://54.82.231.80:3117/affivo/purchases', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(obj),
+
+    });
+    // console.log("response is ",response);
+    let json = await response.json();
+    console.log("Adding purchase json is", json);
+    if (json['message'] === "Purchase Invoice added Successfully" || json['code'] === '200') {
+      console.log("Purchase added successfully");
+      alert("Purchase added successfully");
+    }
+    else {
+      alert("Purchase not added");
+    }
+
+    // return json.movies;
+  } catch (error) {
+    console.error("Error is ", error);
+    // throw error;
+  }
+}
+
 
 //Delete Selected Sale 
 export const deleteSale = async(inv_no) => {
@@ -125,6 +154,33 @@ export const deleteSale = async(inv_no) => {
     }
     else {
       alert("Sale not Deleted");
+    }
+
+    // return json.movies;
+  } catch (error) {
+    console.error("Error is ", error);
+    // throw error;
+  }
+  
+
+}
+
+//Delete Selected Purchase 
+export const deletePurchase = async(inv_no) => {
+  console.log("Inside delete purchase inv_no is ",inv_no);
+  try {
+    let response = await fetch(
+      'http://54.82.231.80:3117/affivo/purchases?invoiceId=' + inv_no, {
+      method: 'DELETE',
+    });
+    let json = await response.json();
+    console.log("Deleting purchase json is", json);
+    if (json['message'] === "Purchase Deleted successfully" || json['code'] === '200') {
+      console.log("Purchase Deleted successfully");
+      alert("Your Purchase is deleted");
+    }
+    else {
+      alert("Purchase not Deleted");
     }
 
     // return json.movies;
@@ -154,6 +210,35 @@ export const updateSale = async(obj , inv_no) => {
     }
     else {
       alert("Sale not updated");
+    }
+
+    // return json.movies;
+  } catch (error) {
+    console.error("Error is ", error);
+    // throw error;
+  }
+  
+
+}
+
+//Update Selected Purchase 
+export const updatePurchase = async(obj , inv_no) => {
+  console.log("Inside updatePurchase  is ",obj);
+  try {
+    let response = await fetch(
+      'http://54.82.231.80:3117/affivo/purchases?invoiceNumber=' + inv_no, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(obj),
+    });
+    let json = await response.json();
+    console.log("Updating purchase json is", json);
+    if (json['message'] === "Purchase updated success fully" || json['code'] === '200') {
+      console.log("Purchase updated successfully");
+      alert("Your Purchase is Updated");
+    }
+    else {
+      alert("Purchase not updated");
     }
 
     // return json.movies;

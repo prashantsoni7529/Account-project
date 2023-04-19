@@ -6,12 +6,16 @@ import {
   SafeAreaView,
   FlatList,
   StatusBar,
-  TouchableOpacity,
+  TouchableOpacity, Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import PurchaseForm from './PurchaseForm';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {PurchaseContext} from '../contexts/Context';
+import { CollectPurchaseData, deletePurchase } from '../Apicalls';
+import { AuthContext } from '../contexts/Context';
+import MonthsDropDown from './GstDatalist';
+import { Months } from "./MonthData";
 
 
 
@@ -51,9 +55,44 @@ const PurchaseScreen = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [item_data,setitem_data] = useState({});
   const [addPurchase, setAddPurchase] = useState(true);
+  const [monthVal, setMonthVal] = useState("Select Month");
 
-  const DATA = useContext(PurchaseContext);
+
+  const {PurchaseData,setPurchaseData} = useContext(PurchaseContext);
+  const DATA = PurchaseData;
   console.log("purchaseData data in context is ",DATA);
+
+  const authData = useContext(AuthContext);
+
+    // Define a function to display the confirmation dialog
+    const displayConfirmationDialog = (data) => {
+      Alert.alert(
+        'Confirm',
+        'Are you sure you want to delete this record ?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel'
+          },
+          {
+            text: 'Confirm',
+            onPress: () => onPressDeletebtn(data)
+          }
+        ]
+      );
+    }
+  
+    const onPressDeletebtn = async (data) => {
+      console.log("Pressing delete btn", data.purchase_id, typeof (data.purchase_id));
+      let inv_no = data.purchase_id;
+      let purchase_data = [];
+      console.log("Inside if of delete dtn ", inv_no);
+      await deletePurchase(inv_no);
+      purchase_data = await CollectPurchaseData(authData);
+      setPurchaseData(purchase_data);
+  
+  
+    }
 
   const onPressEditbtn = (data) => {
     selected_item_data(data.purchase_bill_number);
@@ -65,7 +104,10 @@ const PurchaseScreen = () => {
   };
   console.debug('outside function ',editItemId , isEditing ,item_data);
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = async () => {
+    let purchase_data = [];
+    purchase_data = await CollectPurchaseData(authData);
+    setPurchaseData(purchase_data);
     setIsEditing(false);
     seteditItemId(null);
     setAddPurchase(true);
@@ -89,10 +131,13 @@ const PurchaseScreen = () => {
                   <Text style={styles.item_content}>{item.taxable_value}</Text>
                   <Text style={styles.item_content}>{item.invoice_value}</Text>
                 </View>
-                <View style={[styles.item_edit,styles.name_and_icon_style]}>
-                  <TouchableOpacity onPress={()=>onPressEditbtn(item)}>
-                  <Ionicons name="md-create" size={24} color={'#3b448f'}/>
+                <View style={[styles.item_edit, styles.item_data, styles.name_and_icon_style]}>
+                  <TouchableOpacity onPress={() => onPressEditbtn(item)}>
+                  <Ionicons name="md-create" size={24} color={'#3b448f'} />
                   </TouchableOpacity>
+                  <TouchableOpacity onPress={() => displayConfirmationDialog(item)}>
+                <Ionicons name='ios-trash' color={'#3b448f'} size={25} />
+                </TouchableOpacity>
                 </View>
               </View>
              </TouchableOpacity>
@@ -105,6 +150,13 @@ const PurchaseScreen = () => {
     setIsEditing(true);
     setitem_data({});
     setAddPurchase(false);
+  }
+  const getMonthVal = (val) => {
+    setMonthVal(val);
+  }
+
+  const sendPurchaseToAuditor = () => {
+    alert("Trying to send your selected month Purchases to auditor");
   }
 
   const selected_item_data = (purchase_bill_number) =>{
@@ -120,7 +172,19 @@ const PurchaseScreen = () => {
   return (
     <>
     {addPurchase ? (
-    <View  style={{ flexDirection:'row-reverse',margin:10,alignItems:'center',gap:7}}>
+    <View style={{ flexDirection: 'row', margin: 10, alignItems: 'center', gap: 7 }}>
+                <TouchableOpacity style={{
+             backgroundColor: '#0080ff',
+             width: '35%',
+             height: 40,
+             borderRadius: 10,
+             alignItems: 'center',
+             justifyContent: 'center',
+          }} onPress={sendPurchaseToAuditor}>
+            <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
+
+          </TouchableOpacity>
+          <MonthsDropDown   val_data={Months} get_value={getMonthVal} selectedVal={monthVal} />
     <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddPurchases} />
     <Text style={styles.plus_icon}>Add Purchase</Text>
     </View>):(<View></View>)}
@@ -147,10 +211,10 @@ const styles = StyleSheet.create({
     
    
   },
-  plus_icon:{
-    fontWeight:'bold',
+  plus_icon: {
+    fontWeight: 'bold',
     // fontSize:25,
-    color:'#3b448f',
+    color: '#3b448f',
 
     // backgroundColor:'#e6ebf2'
     // textAlign: 'right'
@@ -160,29 +224,29 @@ const styles = StyleSheet.create({
   item_content: {
     fontSize: 10,
   },
-  name_and_icon_style:{
-    fontWeight:'bold',
-    fontSize:15,
-    color:'#3b448f',
+  name_and_icon_style: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: '#3b448f',
     
   },
   item: {
     // backgroundColor: '#a9c6ff',
-    borderColor:'#b0aea9',
-    borderWidth:2,
+    borderColor: '#b0aea9',
+    borderWidth: 2,
 
-    height:120,
+    height: 120,
     // paddingTop: 10,
     // paddingBottom:10,
-    padding:5,
-    marginTop:'-6%',
-    flex:1,
-    flexDirection:'row',
+    padding: 5,
+    marginTop: '-6%',
+    flex: 1,
+    flexDirection: 'row',
     
     // alignItems:'flex-start',
     // alignItems:'center',
 
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     
   },
  
@@ -190,13 +254,13 @@ const styles = StyleSheet.create({
   
   item_data: {
     // backgroundColor:'green',
-    alignItems:'center',
-    justifyContent:'space-around',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
-  item_edit:{
+  item_edit: {
     // backgroundColor:'yellow',
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });
 

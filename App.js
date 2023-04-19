@@ -122,7 +122,7 @@ export default function App() {
        (<CompanyContext.Provider value={companyData}>
         <ProfileContext.Provider value={userData}>
         <SalesContext.Provider value={{SalesData,setSalesData}}>
-        <PurchaseContext.Provider value={PurchaseData}>
+        <PurchaseContext.Provider value={{PurchaseData,setPurchaseData}}>
         <AuthContext.Provider value={authToken}>
         <NavTabs />
         </AuthContext.Provider>

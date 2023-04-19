@@ -15,7 +15,6 @@ import Dropdown from './Dropdown';
 const Form = ({ data, cancel }) => {
   var check_data_keys = Object.keys(data).length;
   const [Invoice_Date, setInvoice_Date] = useState(check_data_keys ? (data.invoice_date) : new Date());
-  // const [changedDate , setChangedDate] = useState("");
   const [c_gst, set_c_gst] = useState(check_data_keys ? data.customer_gst : "");
   const [v_name, set_c_name] = useState(check_data_keys ? data.customer_name : "");
   const [bill_party, set_bill_to_party] = useState(check_data_keys ? data.bill_to_party : "");
@@ -48,7 +47,6 @@ const Form = ({ data, cancel }) => {
 
 
   const onChange = (event, selectedDate) => {
-    // selectedDate = handleSelectedDate(selectedDate);
     const currentDate = selectedDate || Invoice_Date;
     setShowPicker(false);
     setInvoice_Date(currentDate);
@@ -69,7 +67,7 @@ const Form = ({ data, cancel }) => {
     // SUbmit first all data inside db then close this modal
     let obj = {};
     console.log(Invoice_Date, c_gst, v_name, bill_party, "bill_party_state is ", bill_party_state, "ship_party", ship_party, "ship_party_state is ", ship_party_state, tax_val, invoice_val, Invoice);
-    if (Invoice_Date === "" || c_gst === "" || v_name === "" || bill_party === "" || bill_party_state === "" || ship_party === "" || ship_party_state === "" || tax_val === "" || invoice_val === "" || Invoice === "") {
+    if (salesBillNo === "" || Invoice_Date === "" || c_gst === "" || v_name === "" || bill_party === "" || bill_party_state === "" || ship_party === "" || ship_party_state === "" || tax_val === "" || invoice_val === "" || Invoice === "") {
 
       alert("All fields are required to fill ");
     }

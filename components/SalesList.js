@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState,useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -166,7 +166,7 @@ const SalesScreen = () => {
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
           </TouchableOpacity>
-          <MonthsDropDown val_data={Months} get_value={getMonthVal} selectedVal={monthVal} />
+          <MonthsDropDown   val_data={Months} get_value={getMonthVal} selectedVal={monthVal} />
           <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddSales} />
           <Text style={styles.plus_icon}>Add Sales</Text>
         </View>) : (<View></View>)}
