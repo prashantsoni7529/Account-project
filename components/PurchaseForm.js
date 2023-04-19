@@ -13,7 +13,7 @@ import Dropdown from './Dropdown';
   
 const Form = ({ data, cancel }) => {
   var check_data_keys = Object.keys(data).length;
-  const [Invoice_Date, setInvoice_Date] = useState(check_data_keys ? (data.invoice_date) : new Date());
+  const [Invoice_Date, setInvoice_Date] = useState(check_data_keys ? (data.invoice_date) : new Date().toLocaleDateString("en-CA"));
   const [c_gst, set_c_gst] = useState(check_data_keys ? data.vendor_gst : "");
   const [v_name, set_c_name] = useState(check_data_keys ? data.vendor_name : "");
   const [bill_party, set_bill_to_party] = useState(check_data_keys ? data.bill_to_party : "");
@@ -47,7 +47,7 @@ const Form = ({ data, cancel }) => {
 
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || Invoice_Date;
+    const currentDate = selectedDate.toLocaleDateString("en-CA") || Invoice_Date;
     setShowPicker(false);
     setInvoice_Date(currentDate);
 
@@ -74,7 +74,7 @@ const Form = ({ data, cancel }) => {
     else {
       obj = {
         purchase_bill_number: purchaseBillNo,
-        invoice_date: handleSelectedDate(Invoice_Date),
+        invoice_date: Invoice_Date,
         vendor_gst: c_gst,
         vendor_name: v_name,
         bill_to_party: bill_party,
@@ -134,14 +134,14 @@ const Form = ({ data, cancel }) => {
       {showPicker && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={Invoice_Date}
+          value={new Date()}
           mode="date"
           is24Hour={true}
           display="default"
           onChange={onChange}
         />
       )}
-        <TextInput placeholder="Selected Date" style={styles.input} value={handleSelectedDate(Invoice_Date)} />
+        <TextInput placeholder="Selected Date" style={styles.input} value={Invoice_Date} />
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Vendor GST:</Text>
