@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -156,12 +156,12 @@ const SalesScreen = () => {
       {addSale ? (
         <View style={{ flexDirection: 'row', margin: 10, alignItems: 'center', gap: 7 }}>
           <TouchableOpacity style={{
-             backgroundColor: '#0080ff',
-             width: '35%',
-             height: 40,
-             borderRadius: 10,
-             alignItems: 'center',
-             justifyContent: 'center',
+            backgroundColor: '#0080ff',
+            width: '35%',
+            height: 40,
+            borderRadius: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
           }} onPress={sendSalesToAuditor}>
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
@@ -170,16 +170,17 @@ const SalesScreen = () => {
           <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddSales} />
           <Text style={styles.plus_icon}>Add Sales</Text>
         </View>) : (<View></View>)}
-
-      {isEditing ? (
-        <SalesForm data={item_data} cancel={handleCancelEdit} />
-      ) : (
-        <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.sales_bill_number}
-        />
-      )}
+      <View style={{ position:'relative',elevation:-1 , zIndex : -1}}>
+        {isEditing ? (
+          <SalesForm data={item_data} cancel={handleCancelEdit} />
+        ) : (
+          <FlatList
+            data={DATA}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.sales_bill_number}
+          />
+        )}
+      </View>
     </>
   );
 

@@ -1,62 +1,71 @@
 import {
-    View,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    
-  } from 'react-native';
-import React, {useRef, useState} from 'react';
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList, Modal
 
- 
-  const GstDLL = (props) => {
-    const [clicked, setClicked] = useState(false);
-    const [data, setData] = useState(props.val_data);
-    const [selectedState, setSelectedState] = useState(props.selectedVal);
-    
-    return (
-      <View style={{flex: 1}}>
-        <TouchableOpacity
-          style={{
-            // backgroundColor:'red',
-            width: '90%',
-            height: 50,
-            borderRadius: 10,
-            borderWidth: 0.5,
-            alignSelf: 'center',
-            marginTop: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingLeft: 15,
-            paddingRight: 15,
-          }}
-          onPress={() => {
-            setClicked(!clicked);
-          }}>
-          <Text style={{fontWeight:'600'}}>
-            {selectedState == '' ? 'Select value' : selectedState}
-          </Text>
-        </TouchableOpacity>
+} from 'react-native';
+import React, { useRef, useState } from 'react';
+
+
+const GstDLL = (props) => {
+  const [clicked, setClicked] = useState(false);
+  const [data, setData] = useState(props.val_data);
+  const [selectedState, setSelectedState] = useState(props.selectedVal);
+
+  return (
+    <View style={{ flex: 1, position: 'relative' }}>
+      <TouchableOpacity
+        style={{
+          // backgroundColor:'red',
+          width: '90%',
+          height: 50,
+          borderRadius: 10,
+          borderWidth: 0.5,
+          alignSelf: 'center',
+          marginTop: 10,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingLeft: 15,
+          paddingRight: 15,
+        }}
+        onPress={() => {
+          setClicked(!clicked);
+        }}>
+        <Text style={{ fontWeight: '600' }}>
+          {selectedState == '' ? 'Select value' : selectedState}
+        </Text>
+      </TouchableOpacity>
+      <Modal visible={clicked} onBackdropPress={() => setClicked(false)} transparent>
         {clicked ? (
-          <View
+          <View 
             style={{
+              // overflow: 'scroll',
+              position: 'absolute',
               elevation: 5,
-              marginTop: 20,
-              height:250,
+              zIndex: 5,
+              top: 50,
+              marginTop: '25%',
+              height: 200,
+              // maxHeight: 250,
+              overflow: 'hidden',
               alignSelf: 'center',
-              width: '90%',
+              width: '30%',
               backgroundColor: '#fff',
               borderRadius: 10,
             }}>
-            
+
             <FlatList
-            nestedScrollEnabled
+              nestedScrollEnabled
               data={data}
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 return (
                   <TouchableOpacity
                     style={{
-                      width: '85%',
+                      // elevation :0,
+                      // position:'relative',
+                      width: '80%',
                       alignSelf: 'center',
                       height: 50,
                       justifyContent: 'center',
@@ -68,15 +77,17 @@ import React, {useRef, useState} from 'react';
                       props.get_value(item.value);
                       setClicked(!clicked);
                     }}>
-                    <Text style={{fontWeight: '600'}}>{item.value}</Text>
+                    <Text style={{ fontWeight: '600' }}>{item.value}</Text>
                   </TouchableOpacity>
                 );
               }}
             />
           </View>
         ) : null}
-      </View>
-    );
-  };
-  
-  export default GstDLL;
+      </Modal>
+
+    </View>
+  );
+};
+
+export default GstDLL;
