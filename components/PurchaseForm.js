@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StateData from './StatesData';
 import { GstData } from './GstData';
-import GstDataList from './GstDatalist';
+import GstDataList from './GenericDatalist';
 import { AddNewPurchase ,updatePurchase } from '../Apicalls';
 
 // import Dropdown from './Dropdown';
@@ -57,9 +57,9 @@ const Form = ({ data, cancel }) => {
     setShowPicker(true);
   };
 
-  const getTaxRateValue = (val) => {
-    setInvoice(val);
-  }
+  // const getTaxRateValue = (val) => {
+  //   setInvoice(val);
+  // }
 
 
   const handleSubmit = async () => {
@@ -176,7 +176,7 @@ const Form = ({ data, cancel }) => {
         </View>
       <View style={styles.row}>
         <Text style={styles.label}> Select GST % : </Text>
-        <GstDataList val_data={GstData} get_value={getTaxRateValue} selectedVal={Invoice} />
+        <GstDataList val_data={GstData} onchanged_value={setInvoice} selectedVal={Invoice} />
       {/* <Dropdown  val_data ={GstData}/> */}
       </View>
       <View style={styles.row}>

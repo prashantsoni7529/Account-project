@@ -20,7 +20,13 @@ import React, {useRef,useEffect, useState} from 'react';
 
     useEffect(() => {
       LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, [])
+  }, []);
+
+    useEffect(()=> {
+     
+      props.stateSelected(selectedState);
+
+    },[selectedState]);
 
     const onSearch = search => {
       if (search !== '') {
@@ -54,7 +60,7 @@ import React, {useRef,useEffect, useState} from 'react';
           }}>
           <Text style={{fontWeight:'600'}}>
             {selectedState == '' ? 'Select State' : selectedState}
-           { props.stateSelected(selectedState)}
+           
           </Text>
         </TouchableOpacity>
         {clicked ? (

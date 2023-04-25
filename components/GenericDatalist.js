@@ -5,13 +5,17 @@ import {
     FlatList,
     
   } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
  
-  const GstDLL = (props) => {
+  const DLL = (props) => {
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState(props.val_data);
-    const [selectedState, setSelectedState] = useState(props.selectedVal);
+    const [selectedValue, setSelectedValue] = useState(props.selectedVal);
+
+    useEffect(()=>{
+      props.onchanged_value(selectedValue)
+    },[selectedValue]);
     
     return (
       <View style={{flex: 1}}>
@@ -34,7 +38,8 @@ import React, {useRef, useState} from 'react';
             setClicked(!clicked);
           }}>
           <Text style={{fontWeight:'600'}}>
-            {selectedState == '' ? 'Select value' : selectedState}
+            {selectedValue == '' ? 'Select value' : selectedValue}
+            
           </Text>
         </TouchableOpacity>
         {clicked ? (
@@ -64,8 +69,7 @@ import React, {useRef, useState} from 'react';
                       borderColor: '#8e8e8e',
                     }}
                     onPress={() => {
-                      setSelectedState(item.value);
-                      props.get_value(item.value);
+                      setSelectedValue(item.value);
                       setClicked(!clicked);
                     }}>
                     <Text style={{fontWeight: '600'}}>{item.value}</Text>
@@ -79,4 +83,4 @@ import React, {useRef, useState} from 'react';
     );
   };
   
-  export default GstDLL;
+  export default DLL;

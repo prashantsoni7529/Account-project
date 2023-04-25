@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {PurchaseContext} from '../contexts/Context';
 import { CollectPurchaseData, deletePurchase } from '../Apicalls';
 import { AuthContext } from '../contexts/Context';
-import MonthsDropDown from './GstDatalist';
+import MonthsDropDown from './GenericDatalist';
 import { Months } from "./MonthData";
 
 
@@ -151,9 +151,9 @@ const PurchaseScreen = () => {
     setitem_data({});
     setAddPurchase(false);
   }
-  const getMonthVal = (val) => {
-    setMonthVal(val);
-  }
+  // const getMonthVal = (val) => {
+  //   setMonthVal(val);
+  // }
 
   const sendPurchaseToAuditor = () => {
     alert("Trying to send your selected month Purchases to auditor");
@@ -184,7 +184,7 @@ const PurchaseScreen = () => {
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
           </TouchableOpacity>
-          <MonthsDropDown   val_data={Months} get_value={getMonthVal} selectedVal={monthVal} />
+          <MonthsDropDown   val_data={Months} onchanged_value={setMonthVal} selectedVal={monthVal} />
     <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddPurchases} />
     <Text style={styles.plus_icon}>Add Purchase</Text>
     </View>):(<View></View>)}

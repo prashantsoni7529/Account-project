@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { SalesContext } from '../contexts/Context';
 import { CollectSalesData, deleteSale } from '../Apicalls';
 import { AuthContext } from '../contexts/Context';
-import MonthsDropDown from './GstDatalist';
+import MonthsDropDown from './GenericDatalist';
 import { Months } from "./MonthData";
 
 
@@ -133,9 +133,9 @@ const SalesScreen = () => {
     setitem_data({});
     setAddSale(false);
   }
-  const getMonthVal = (val) => {
-    setMonthVal(val);
-  }
+  // const getMonthVal = (val) => {
+  //   setMonthVal(val);
+  // }
 
   const sendSalesToAuditor = () => {
     alert("Trying to send your selected month sales to auditor");
@@ -166,7 +166,7 @@ const SalesScreen = () => {
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
           </TouchableOpacity>
-          <MonthsDropDown   val_data={Months} get_value={getMonthVal} selectedVal={monthVal} />
+          <MonthsDropDown   val_data={Months} onchanged_value={setMonthVal} selectedVal={monthVal} />
           <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddSales} />
           <Text style={styles.plus_icon}>Add Sales</Text>
         </View>) : (<View></View>)}
