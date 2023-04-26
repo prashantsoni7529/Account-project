@@ -12,9 +12,11 @@ import React, {useEffect, useRef, useState} from 'react';
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState(props.val_data);
     const [selectedValue, setSelectedValue] = useState(props.selectedVal);
+    const [selectedLabel,setSelectedLabel]  = useState("00");
 
     useEffect(()=>{
-      props.onchanged_value(selectedValue)
+      props.onchanged_value(selectedValue,selectedLabel);
+      console.log("here selected val and label  are ",selectedValue,selectedLabel);
     },[selectedValue]);
     
     return (
@@ -69,7 +71,8 @@ import React, {useEffect, useRef, useState} from 'react';
                       borderColor: '#8e8e8e',
                     }}
                     onPress={() => {
-                      setSelectedValue(item.value);
+                      setSelectedValue(item.hasOwnProperty('value') ? item.value : "Current");
+                      setSelectedLabel(item.hasOwnProperty('label') ? item.label : "00");
                       setClicked(!clicked);
                     }}>
                     <Text style={{fontWeight: '600'}}>{item.value}</Text>

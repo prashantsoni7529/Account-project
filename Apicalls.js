@@ -26,10 +26,10 @@ export const CollectCompanyData = async (token) => {
 }
 
 //Get Request for Sales data
-export const CollectSalesData = async (token) => {
+export const CollectSalesData = async (token,label,pg_no = 1) => {
   try {
     let response = await fetch(
-      'http://54.82.231.80:3117/affivo/sales?month=current&pageNumber=1', {
+      `http://54.82.231.80:3117/affivo/sales?month=${label}&pageNumber=${pg_no}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -37,7 +37,7 @@ export const CollectSalesData = async (token) => {
       }
     });
     let json = await response.json();
-    console.log("Sales data json  returned is ", json);
+    console.log("Sales data json  soniji returned is ", json);
     if (json.hasOwnProperty('data') && json['data'] !== "") {
       return json.data;
 
@@ -53,10 +53,10 @@ export const CollectSalesData = async (token) => {
 }
 
 //Get Request for Purchase data
-export const CollectPurchaseData = async (token) => {
+export const CollectPurchaseData = async (token,label,pg_no = 1) => {
   try {
     let response = await fetch(
-      'http://54.82.231.80:3117/affivo/purchases?month=current&pageNumber=1', {
+      `http://54.82.231.80:3117/affivo/purchases?month=${label}&pageNumber=${pg_no}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

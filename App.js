@@ -39,8 +39,8 @@ export default function App() {
       const response = await Promise.all([
         fetch('http://54.82.231.80:3117/affivo/organizations', payload),
         fetch('http://54.82.231.80:3117/affivo/users', payload),
-        fetch('http://54.82.231.80:3117/affivo/sales?month=current&pageNumber=1', payload),
-        fetch('http://54.82.231.80:3117/affivo/purchases?month=current&pageNumber=1', payload),
+        fetch('http://54.82.231.80:3117/affivo/sales?month=00&pageNumber=1', payload),
+        fetch('http://54.82.231.80:3117/affivo/purchases?month=00&pageNumber=1', payload),
       ]);
       const responseData = await Promise.all(response.map(res => res.json()));
       setCompanyData(responseData[0].data);
@@ -75,6 +75,7 @@ export default function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
+      console.log("inside App.js");
       console.log(" authToken val is ", authToken);
       console.log(" isLoggedIn val is ", isLoggedIn);
       console.log(" userData val is ", userData);

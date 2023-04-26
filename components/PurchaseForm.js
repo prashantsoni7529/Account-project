@@ -31,19 +31,19 @@ const Form = ({ data, cancel }) => {
 
   console.debug('data coming from flatlist', data, invoice_val, tax_val);
 
-  const handleSelectedDate = (dateString) => {
-    // const dateString = '2023-04-18';
-    const date = new Date(dateString);
+  // const handleSelectedDate = (dateString) => {
+  //   // const dateString = '2023-04-18';
+  //   const date = new Date(dateString);
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+  //   const year = date.getFullYear();
+  //   const month = String(date.getMonth() + 1).padStart(2, '0');
+  //   const day = String(date.getDate()).padStart(2, '0');
 
-    const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
-    // dateString = String(dateString.split('T')[0]);
-    // return dateString;
-  }
+  //   const formattedDate = `${year}-${month}-${day}`;
+  //   return formattedDate;
+  //   // dateString = String(dateString.split('T')[0]);
+  //   // return dateString;
+  // }
 
 
   const onChange = (event, selectedDate) => {

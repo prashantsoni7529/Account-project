@@ -16,6 +16,7 @@ import { CollectPurchaseData, deletePurchase } from '../Apicalls';
 import { AuthContext } from '../contexts/Context';
 import MonthsDropDown from './GenericDatalist';
 import { Months } from "./MonthData";
+import { useEffect } from 'react';
 
 
 
@@ -55,12 +56,13 @@ const PurchaseScreen = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [item_data,setitem_data] = useState({});
   const [addPurchase, setAddPurchase] = useState(true);
-  const [monthVal, setMonthVal] = useState("Select Month");
+  const [monthVal, setMonthVal] = useState("Current");
+  const [monthLabel, setMonthLabel] = useState("00");
 
 
   const {PurchaseData,setPurchaseData} = useContext(PurchaseContext);
   const DATA = PurchaseData;
-  console.log("purchaseData data in context is ",DATA);
+  // console.log("purchaseData data in context is ",DATA);
 
   const authData = useContext(AuthContext);
 
@@ -88,7 +90,7 @@ const PurchaseScreen = () => {
       let purchase_data = [];
       console.log("Inside if of delete dtn ", inv_no);
       await deletePurchase(inv_no);
-      purchase_data = await CollectPurchaseData(authData);
+      purchase_data = await CollectPurchaseData(authData, monthLabel, 1);
       setPurchaseData(purchase_data);
   
   
@@ -102,11 +104,11 @@ const PurchaseScreen = () => {
 
    console.debug('edit button is clicked',data.purchase_bill_number,data.vendor_name);
   };
-  console.debug('outside function ',editItemId , isEditing ,item_data);
+  // console.debug('outside function ',editItemId , isEditing ,item_data);
 
   const handleCancelEdit = async () => {
     let purchase_data = [];
-    purchase_data = await CollectPurchaseData(authData);
+    purchase_data = await CollectPurchaseData(authData, monthLabel, 1);
     setPurchaseData(purchase_data);
     setIsEditing(false);
     seteditItemId(null);
@@ -151,9 +153,29 @@ const PurchaseScreen = () => {
     setitem_data({});
     setAddPurchase(false);
   }
-  // const getMonthVal = (val) => {
-  //   setMonthVal(val);
-  // }
+
+
+
+  useEffect(() => {
+    console.log("in useffect month label is", monthLabel, "month val is", monthVal);
+    const fetchPurchaseData = async () => {
+      let purchase_data = [];
+      purchase_data = await CollectPurchaseData(authData, monthLabel, 1);
+      // console.log("Inside getMonthVal fun and sale data coming is ",sale_data);
+      setPurchaseData(purchase_data);
+    };
+    fetchPurchaseData();
+  }, [monthVal]);
+
+
+  const getMonthVal = (val, label) => {
+    console.log("coming val and label are", val, label);
+    setMonthVal(val);
+    setMonthLabel(label);
+    console.log("month Label is ", monthLabel, 'label is ', label);
+
+
+  }
 
   const sendPurchaseToAuditor = () => {
     alert("Trying to send your selected month Purchases to auditor");
@@ -184,7 +206,7 @@ const PurchaseScreen = () => {
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
           </TouchableOpacity>
-          <MonthsDropDown   val_data={Months} onchanged_value={setMonthVal} selectedVal={monthVal} />
+          <MonthsDropDown val_data={Months} onchanged_value={getMonthVal} selectedVal={monthVal} />
     <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddPurchases} />
     <Text style={styles.plus_icon}>Add Purchase</Text>
     </View>):(<View></View>)}

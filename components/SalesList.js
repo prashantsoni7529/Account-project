@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -36,12 +36,13 @@ const SalesScreen = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [item_data, setitem_data] = useState({});
   const [addSale, setAddSale] = useState(true);
-  const [monthVal, setMonthVal] = useState("Select Month");
+  const [monthVal, setMonthVal] = useState("Current");
+  const [monthLabel, setMonthLabel] = useState("00");
 
 
   const { SalesData, setSalesData } = useContext(SalesContext);
   const DATA = SalesData;
-  console.log("sales data in context is ", DATA);
+  // console.log("sales data in context is ", DATA);
 
   const authData = useContext(AuthContext);
 
@@ -69,7 +70,7 @@ const SalesScreen = () => {
     let sale_data = [];
     console.log("Inside if of delete dtn ", inv_no);
     await deleteSale(inv_no);
-    sale_data = await CollectSalesData(authData);
+    sale_data = await CollectSalesData(authData, monthLabel, 1);
     setSalesData(sale_data);
 
 
@@ -83,12 +84,13 @@ const SalesScreen = () => {
 
     console.debug('edit button is clicked', data.sales_bill_number, data.customer_name);
   };
-  console.debug('outside function ', editItemId, isEditing, item_data);
+  // console.debug('outside function ', editItemId, isEditing, item_data);
 
 
   const handleCancelEdit = async () => {
     let sale_data = [];
-    sale_data = await CollectSalesData(authData);
+    console.log("handlecancel label is", monthLabel);
+    sale_data = await CollectSalesData(authData, monthLabel, 1);
     setSalesData(sale_data);
     setIsEditing(false);
     seteditItemId(null);
@@ -133,9 +135,29 @@ const SalesScreen = () => {
     setitem_data({});
     setAddSale(false);
   }
-  // const getMonthVal = (val) => {
-  //   setMonthVal(val);
-  // }
+
+
+
+  useEffect(() => {
+    console.log("in useffect month label is", monthLabel, "month val is", monthVal);
+    const fetchSalesData = async () => {
+      let sale_data = [];
+      sale_data = await CollectSalesData(authData, monthLabel, 1);
+      // console.log("Inside getMonthVal fun and sale data coming is ",sale_data);
+      setSalesData(sale_data);
+    };
+    fetchSalesData();
+  }, [monthVal]);
+
+
+  const getMonthVal = (val, label) => {
+    console.log("coming val and label are", val, label);
+    setMonthVal(val);
+    setMonthLabel(label);
+    console.log("month Label is ", monthLabel, 'label is ', label);
+
+
+  }
 
   const sendSalesToAuditor = () => {
     alert("Trying to send your selected month sales to auditor");
@@ -156,17 +178,17 @@ const SalesScreen = () => {
       {addSale ? (
         <View style={{ flexDirection: 'row', margin: 10, alignItems: 'center', gap: 7 }}>
           <TouchableOpacity style={{
-             backgroundColor: '#0080ff',
-             width: '35%',
-             height: 40,
-             borderRadius: 10,
-             alignItems: 'center',
-             justifyContent: 'center',
+            backgroundColor: '#0080ff',
+            width: '35%',
+            height: 40,
+            borderRadius: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
           }} onPress={sendSalesToAuditor}>
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
           </TouchableOpacity>
-          <MonthsDropDown   val_data={Months} onchanged_value={setMonthVal} selectedVal={monthVal} />
+          <MonthsDropDown val_data={Months} onchanged_value={getMonthVal} selectedVal={monthVal} />
           <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddSales} />
           <Text style={styles.plus_icon}>Add Sales</Text>
         </View>) : (<View></View>)}
