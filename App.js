@@ -5,7 +5,7 @@ import Login from './components/Login';
 import NavTabs from './components/BottomTabNavigator';
 // import { CollectCompanyData, CollectSalesData, CollectPurchaseData } from './Apicalls';
 import {CompanyContext , ProfileContext , PurchaseContext , SalesContext ,AuthContext} from './contexts/Context';
-
+import { BackHandler, Alert } from 'react-native';
 
 export default function App() {
 
@@ -114,7 +114,32 @@ export default function App() {
 
   }, [isLoggedIn]);
 
-
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert(
+        "Confirm Exit",
+        "Are you sure you want to exit?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel"
+          },
+          { text: "Exit", onPress: () => BackHandler.exitApp() }
+        ],
+        { cancelable: false }
+      );
+      return true;
+    };
+  
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+  
+    // Clean up the event listener on unmount
+    return () => backHandler.remove();
+  }, []);
 
   return (
 

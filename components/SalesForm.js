@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView,BackHandler} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StateData from './StatesData';
@@ -57,10 +57,29 @@ const Form = ({ data, cancel }) => {
     setShowPicker(true);
   };
 
-  // const getTaxRateValue = (val) => {
-  //   setInvoice(val);
-  // }
-
+  
+  useEffect(() => {
+    const backAction = () => {
+      // Add your logic here to handle back button press
+      // Call the function you want to execute
+      handleClose();
+      
+      // Return 'true' to prevent default back button behavior
+      return true;
+    };
+  
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+  
+    // Clean up the event listener on unmount
+    return () => backHandler.remove();
+  }, []);
+ 
+  const handleClose = () =>{
+    cancel();
+  }
 
   const handleSubmit = async () => {
     // Your form submission logic here
@@ -192,10 +211,14 @@ const Form = ({ data, cancel }) => {
           <TextInput style={styles.input} editable={false} value={invoice_val} />
         </View>
 
-
+        <View style={{flex:1,flexDirection:'row'}}>
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleClose}>
+          <Text style={styles.buttonText}>Close</Text>
+        </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -230,13 +253,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: '#0080ff',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+    margin:10,
   },
   buttonText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: 'bold',
     fontSize: 18,
   },
