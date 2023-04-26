@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import {CompanyContext} from '../contexts/Context';
+import CompanyLogo from './companySvg';
+
 
 const CompanyForm = () => {
 
@@ -9,11 +11,14 @@ const CompanyForm = () => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: 'https://via.placeholder.com/150x150.png' }}
-        style={styles.logo}
-      />
-
+      <View style={{
+        padding:4,
+        marginBottom:45,
+        marginLeft:80
+      }}>
+      <CompanyLogo/>
+      </View>
+   
       <Text style={styles.label}>Company Name</Text>
       <Text style={styles.value}>{companyData.company_name}</Text>
       <Text style={styles.label}>GST No.</Text>
@@ -32,11 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
-  logo: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
-  },
+
   label: {
     fontSize: 18,
     fontWeight: 'bold',

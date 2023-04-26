@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import  Logo from './logoSvgComp';
 
-const Login = ({logInData}) => {
+const Login = ({ logInData }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
 
-//Login creds
-// username: "singhsourabh074@gmail.com",
-// pass: "sourabhsingh282"
+
+  //Login creds
+  // username: "singhsourabh074@gmail.com",
+  // pass: "sourabhsingh282"
 
   const handleLogin = async () => {
     // Handle login logic here
@@ -28,21 +29,21 @@ const Login = ({logInData}) => {
           body: JSON.stringify({
             username: email,
             pass: password
-            
+
           }
           )
         });
         let json = await response.json();
         console.log("json  returned is ", json);
-        if(json.hasOwnProperty('data') && json['data'] !== ""){
+        if (json.hasOwnProperty('data') && json['data'] !== "") {
           alert("You are logged in");
           logInData(json);
-          
+
         }
-        else{
+        else {
           alert("Username and password are not correct");
         }
-        
+
         // return json.movies;
       } catch (error) {
         console.error(error);
@@ -54,6 +55,7 @@ const Login = ({logInData}) => {
 
   return (
     <View style={styles.container}>
+      <Logo/>
       <Text style={styles.heading}>Login</Text>
       <TextInput
         style={styles.input}

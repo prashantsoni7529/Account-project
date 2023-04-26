@@ -1,7 +1,7 @@
-import React, { useState , useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import { ProfileContext } from '../contexts/Context';
+import ProfileSvg from './Profilesvg';
 
 const EditableField = ({ label, value, onChange }) => {
   // const [editing, setEditing] = useState(false);
@@ -52,16 +52,20 @@ const EditScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Avatar
-        size="large"
-        rounded
-        source={{ uri: 'https://i.pravatar.cc/150' }}
-        containerStyle={styles.avatar}
-      />
+
+      <View style={{
+        borderRadius: 50,
+        borderWidth: 2,
+        borderColor: '#69706f',
+        padding:4,
+        margin:15,
+      }}>
+        <ProfileSvg />
+      </View>
       <EditableField label="Name" value={profileData.name} onChange={setName} />
       <EditableField label="Contact No." value={profileData.mobile} onChange={setContactNo} />
       <EditableField label="Email" value={profileData.email} onChange={setEmail} />
-      <EditableField label="Role" value={profileData.role}  onChange={setRole} />
+      <EditableField label="Role" value={profileData.role} onChange={setRole} />
       {/* <TouchableOpacity style={styles.saveContainer}>
         <Text style={styles.saveButton}>Save All</Text>
       </TouchableOpacity> */}
@@ -77,9 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
-  avatar: {
-    marginBottom: 20,
-  },
+
   field: {
     flexDirection: 'row',
     alignItems: 'center',
