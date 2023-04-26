@@ -2,6 +2,8 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { ProfileContext } from '../contexts/Context';
 import ProfileSvg from './Profilesvg';
+import {LogOut} from '../Apicalls';
+import { AuthContext } from '../contexts/Context';
 
 const EditableField = ({ label, value, onChange }) => {
   // const [editing, setEditing] = useState(false);
@@ -39,16 +41,23 @@ const EditableField = ({ label, value, onChange }) => {
   );
 };
 
-const EditScreen = () => {
+const ProfileScreen = () => {
   const [Name, setName] = useState('');
   const [ContactNo, setContactNo] = useState('');
   const [Email, setEmail] = useState('');
   const [Role, setRole] = useState('');
 
+  const { authToken,setLogIn } = useContext(AuthContext);
 
 
   const profileData = useContext(ProfileContext);
   console.log("profileData data in context is ", profileData);
+
+  const handleLogout = async() =>{
+    setLogIn(false);
+    await LogOut(authToken);
+    alert("Thanks for visiting");
+  }
 
   return (
     <View style={styles.container}>
@@ -66,9 +75,9 @@ const EditScreen = () => {
       <EditableField label="Contact No." value={profileData.mobile} onChange={setContactNo} />
       <EditableField label="Email" value={profileData.email} onChange={setEmail} />
       <EditableField label="Role" value={profileData.role} onChange={setRole} />
-      {/* <TouchableOpacity style={styles.saveContainer}>
-        <Text style={styles.saveButton}>Save All</Text>
-      </TouchableOpacity> */}
+      <TouchableOpacity style={styles.saveContainer} onPress={handleLogout}>
+        <Text style={styles.saveButton}>LOG Out</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -113,13 +122,22 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   saveButton: {
-    color: '#007AFF',
+    color: '#fff',
+    fontWeight: 'bold',
   },
   saveContainer: {
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    marginVertical: 20,
+    backgroundColor: '#0080ff',
+    // width: '30%',
+    // height: 35,
+    borderRadius: 5,
+    // flex:0.1,
+    // flexDirection:'row-reverse',
+    padding:10,
+    top:40,
+    left:'-35%',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
 });
 
-export default EditScreen;
+export default ProfileScreen;

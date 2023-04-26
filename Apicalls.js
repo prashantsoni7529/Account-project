@@ -249,3 +249,29 @@ export const updatePurchase = async(obj , inv_no) => {
   
 
 }
+
+//Handling logout and terminating auth token
+export const LogOut = async (token) => {
+  try {
+    let response = await fetch(
+      'http://54.82.231.80:3117/affivo/logout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', authToken: token },
+
+    });
+    let json = await response.json();
+    console.log("logout response json is", json);
+    if (json['message'] === "User logged out successfully" || json['code'] === '200') {
+      console.log("Logged out successfulluy");
+      
+    }
+    else {
+      alert("Log out not successfull");
+    }
+
+    // return json.movies;
+  } catch (error) {
+    console.error("Error is ", error);
+    // throw error;
+  }
+}
