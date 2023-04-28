@@ -4,7 +4,8 @@ import {
     TouchableOpacity,
     TextInput,
     FlatList,
-    LogBox
+    LogBox,
+    Modal
     
   } from 'react-native';
 import React, {useRef,useEffect, useState} from 'react';
@@ -15,6 +16,8 @@ import React, {useRef,useEffect, useState} from 'react';
     const [clicked, setClicked] = useState(false);
     const [data, setData] = useState(props.val_data);
     const [selectedState, setSelectedState] = useState(props.state);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
     const searchRef = useRef();
 
 
@@ -27,6 +30,14 @@ import React, {useRef,useEffect, useState} from 'react';
       props.stateSelected(selectedState);
 
     },[selectedState]);
+
+    function handlePress(event) {
+      setDropdownPosition({
+        top: event.nativeEvent.pageY - 30,
+        left: 200 ,
+      });
+      console.log("click pos is ",dropdownPosition.top,dropdownPosition.left);
+    }
 
     const onSearch = search => {
       if (search !== '') {
@@ -55,22 +66,29 @@ import React, {useRef,useEffect, useState} from 'react';
             paddingLeft: 15,
             paddingRight: 15,
           }}
-          onPress={() => {
+          onPress={(event) => {
+            handlePress(event);
             setClicked(!clicked);
+            setModalVisible(true);
           }}>
           <Text style={{fontWeight:'600'}}>
             {selectedState == '' ? 'Select State' : selectedState}
            
           </Text>
         </TouchableOpacity>
+        {console.log("click pos is ",dropdownPosition.top,dropdownPosition.left)}
         {clicked ? (
+          <Modal visible={modalVisible} transparent={true}  onRequestClose={()=>setModalVisible(false)}>
           <View
             style={{
+              position:'absolute',
+              top:dropdownPosition.top,
+              left:dropdownPosition.left,
               elevation: 5,
               marginTop: 20,
               height:250,
               alignSelf: 'center',
-              width: '90%',
+              width: '34%',
               backgroundColor: '#fff',
               borderRadius: 10,
             }}>
@@ -110,6 +128,7 @@ import React, {useRef,useEffect, useState} from 'react';
                     }}
                     onPress={() => {
                       setSelectedState(item.value);
+                      setModalVisible(false);
                       setClicked(!clicked);
                       onSearch('');
                       setSearch('');
@@ -120,6 +139,7 @@ import React, {useRef,useEffect, useState} from 'react';
               }}
             />
           </View>
+          </Modal>
         ) : null}
       </View>
     );
