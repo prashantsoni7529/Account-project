@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import SalesForm from './SalesForm';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SalesContext } from '../contexts/Context';
-import { CollectSalesData, deleteSale } from '../Apicalls';
+import { CollectSalesData, deleteSale ,SendSalesToAuditor } from '../Apicalls';
 import { AuthContext } from '../contexts/Context';
 import MonthsDropDown from './GenericDatalist';
 import { Months } from "./MonthData";
@@ -64,6 +64,24 @@ const SalesScreen = () => {
     );
   }
 
+  // Define a function to display the confirmation dialog
+  const ConfirmSaleSubmission = () => {
+    Alert.alert(
+      'Confirm',
+      'Final submission of selected month sales. ?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Confirm',
+          onPress: () => sendToAuditor()
+        }
+      ]
+    );
+  }
+
   const onPressDeletebtn = async (data) => {
     console.log("Pressing delete btn", data.sales_id, typeof (data.sales_id));
     let inv_no = data.sales_id;
@@ -98,6 +116,7 @@ const SalesScreen = () => {
   };
 
   const renderItem = ({ item }) => {
+    const isSentVal = item.is_sent;
     return (
       <SafeAreaView style={styles.container}>
         <TouchableOpacity>
@@ -115,14 +134,14 @@ const SalesScreen = () => {
               <Text style={styles.item_content}>{item.taxable_value}</Text>
               <Text style={styles.item_content}>{item.invoice_value}</Text>
             </View>
-            <View style={[styles.item_edit, styles.item_data, styles.name_and_icon_style]}>
+            {!isSentVal ? (<View style={[styles.item_edit, styles.item_data, styles.name_and_icon_style]}>
               <TouchableOpacity onPress={() => onPressEditbtn(item)}>
                 <Ionicons name="md-create" size={24} color={'#3b448f'} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => displayConfirmationDialog(item)}>
                 <Ionicons name='ios-trash' color={'#3b448f'} size={25} />
               </TouchableOpacity>
-            </View>
+            </View>) : <View></View>}
           </View>
         </TouchableOpacity>
       </SafeAreaView>
@@ -159,8 +178,11 @@ const SalesScreen = () => {
 
   }
 
-  const sendSalesToAuditor = () => {
-    alert("Trying to send your selected month sales to auditor");
+  const sendToAuditor = async() => {
+    let sale_data = [];
+    await SendSalesToAuditor(authData, monthLabel);
+    sale_data = await CollectSalesData(authData, monthLabel, 1);
+    setSalesData(sale_data);
   }
 
   const selected_item_data = (sales_bill_number) => {
@@ -184,7 +206,7 @@ const SalesScreen = () => {
             borderRadius: 10,
             alignItems: 'center',
             justifyContent: 'center',
-          }} onPress={sendSalesToAuditor}>
+          }} onPress={ConfirmSaleSubmission}>
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
           </TouchableOpacity>

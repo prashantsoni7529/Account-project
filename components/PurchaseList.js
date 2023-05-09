@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import PurchaseForm from './PurchaseForm';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {PurchaseContext} from '../contexts/Context';
-import { CollectPurchaseData, deletePurchase } from '../Apicalls';
+import { CollectPurchaseData, deletePurchase ,SendPurchaseToAuditor} from '../Apicalls';
 import { AuthContext } from '../contexts/Context';
 import MonthsDropDown from './GenericDatalist';
 import { Months } from "./MonthData";
@@ -83,7 +83,24 @@ const PurchaseScreen = () => {
         ]
       );
     }
-  
+
+  // Define a function to display the confirmation dialog
+  const ConfirmPurchaseSubmission = () => {
+    Alert.alert(
+      'Confirm',
+      'Final submission of selected month purchases. ?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Confirm',
+          onPress: () => sendToAuditor()
+        }
+      ]
+    );
+  }
     const onPressDeletebtn = async (data) => {
       console.log("Pressing delete btn", data.purchase_id, typeof (data.purchase_id));
       let inv_no = data.purchase_id;
@@ -116,6 +133,7 @@ const PurchaseScreen = () => {
   };
 
   const renderItem = ({ item }) => {
+    const isSentVal = item.is_sent;
       return(
         <SafeAreaView style={styles.container}>
              <TouchableOpacity> 
@@ -133,14 +151,14 @@ const PurchaseScreen = () => {
                   <Text style={styles.item_content}>{item.taxable_value}</Text>
                   <Text style={styles.item_content}>{item.invoice_value}</Text>
                 </View>
-                <View style={[styles.item_edit, styles.item_data, styles.name_and_icon_style]}>
+                {!isSentVal ? (<View style={[styles.item_edit, styles.item_data, styles.name_and_icon_style]}>
                   <TouchableOpacity onPress={() => onPressEditbtn(item)}>
                   <Ionicons name="md-create" size={24} color={'#3b448f'} />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => displayConfirmationDialog(item)}>
                 <Ionicons name='ios-trash' color={'#3b448f'} size={25} />
                 </TouchableOpacity>
-                </View>
+                </View>) : <View></View>}
               </View>
              </TouchableOpacity>
           </SafeAreaView>
@@ -161,7 +179,6 @@ const PurchaseScreen = () => {
     const fetchPurchaseData = async () => {
       let purchase_data = [];
       purchase_data = await CollectPurchaseData(authData, monthLabel, 1);
-      // console.log("Inside getMonthVal fun and sale data coming is ",sale_data);
       setPurchaseData(purchase_data);
     };
     fetchPurchaseData();
@@ -177,8 +194,11 @@ const PurchaseScreen = () => {
 
   }
 
-  const sendPurchaseToAuditor = () => {
-    alert("Trying to send your selected month Purchases to auditor");
+  const sendToAuditor = async() => {
+    let purchase_data = [];
+    await SendPurchaseToAuditor(authData, monthLabel);
+    purchase_data = await CollectPurchaseData(authData, monthLabel, 1);
+    setPurchaseData(purchase_data);
   }
 
   const selected_item_data = (purchase_bill_number) =>{
@@ -202,7 +222,7 @@ const PurchaseScreen = () => {
              borderRadius: 10,
              alignItems: 'center',
              justifyContent: 'center',
-          }} onPress={sendPurchaseToAuditor}>
+          }} onPress={ConfirmPurchaseSubmission}>
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
           </TouchableOpacity>
