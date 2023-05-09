@@ -275,3 +275,62 @@ export const LogOut = async (token) => {
     // throw error;
   }
 }
+
+
+//Send Sales to auditor
+
+export const SendSalesToAuditor = async (token,month) => {
+  console.log("sending sales month is ", month);
+  try {
+    let response = await fetch(
+      `http://54.82.231.80:3117/affivo/sales/send?month=${month}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        authToken: token
+      }
+    });
+    let json = await response.json();
+    console.log("Sales data sent to auditor ", json);
+    if ( json['code'] == "200" || json['message'] == 'Sales Sent To Auditor') {
+      alert("Selected month sales sent to Auditor");
+
+    }
+    else {
+      alert("Sales not sent to auditor");
+    }
+
+    // return json.movies;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+//Send Purchase to auditor
+
+export const SendPurchaseToAuditor = async (token,month) => {
+  console.log("sending purchase month is ", month);
+  try {
+    let response = await fetch(
+      `http://54.82.231.80:3117/affivo/purchases/send?month=${month}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        authToken: token
+      }
+    });
+    let json = await response.json();
+    console.log("Purchase data sent to auditor ", json);
+    if ( json['code'] == "200" || json['message'] == 'Purchases Sent To Auditor') {
+      alert("Selected month purchases sent to Auditor");
+
+    }
+    else {
+      alert("Sales not sent to auditor");
+    }
+
+    // return json.movies;
+  } catch (error) {
+    console.error(error);
+  }
+}
