@@ -158,6 +158,7 @@ const Form = ({ data, cancel }) => {
           is24Hour={true}
           display="default"
           onChange={onChange}
+          maximumDate={new Date()}
         />
       )}
         <TextInput placeholder="Selected Date" style={styles.input} value={Invoice_Date} />
