@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Affivo",
-    "slug": "rnaffivo",
+    "slug": "affivo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,8 +29,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "3a68999c-c118-4a82-9a0a-395066e2caab"
+        "projectId": "b26a1a84-83cb-41ba-aae1-4f7b8178ef18"
       }
-    }
+    },
+    "owner": "psoniji1596"
   }
 }
