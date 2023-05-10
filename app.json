@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Account-project",
-    "slug": "Account-project",
+    "name": "Affivo",
+    "slug": "rnaffivo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.psoni1596.rnaffivo"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3a68999c-c118-4a82-9a0a-395066e2caab"
+      }
     }
   }
 }
