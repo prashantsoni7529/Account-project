@@ -180,6 +180,7 @@ const SalesScreen = () => {
 
   const sendToAuditor = async() => {
     let sale_data = [];
+    console.log("month label in auditor send",monthLabel);
     await SendSalesToAuditor(authData, monthLabel);
     sale_data = await CollectSalesData(authData, monthLabel, 1);
     setSalesData(sale_data);
@@ -210,7 +211,7 @@ const SalesScreen = () => {
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
           </TouchableOpacity>
-          <MonthsDropDown val_data={Months} onchanged_value={getMonthVal} selectedVal={monthVal} />
+          <MonthsDropDown val_data={Months} onchanged_value={getMonthVal} selectedVal={monthVal} selectedLabel={monthLabel}/>
           <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddSales} />
           <Text style={styles.plus_icon}>Add Sales</Text>
         </View>) : (<View></View>)}

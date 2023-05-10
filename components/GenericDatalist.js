@@ -12,7 +12,7 @@ const DLL = (props) => {
   const [clicked, setClicked] = useState(false);
   const [data, setData] = useState(props.val_data);
   const [selectedValue, setSelectedValue] = useState(props.selectedVal);
-  const [selectedLabel, setSelectedLabel] = useState("00");
+  const [selectedLabel, setSelectedLabel] = useState(props.selectedLabel);
   const [modalVisible, setModalVisible] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 

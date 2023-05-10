@@ -226,7 +226,7 @@ const PurchaseScreen = () => {
             <Text style={{ color: '#fff', fontWeight: 'bold' }}>Send To Auditor</Text>
 
           </TouchableOpacity>
-          <MonthsDropDown val_data={Months} onchanged_value={getMonthVal} selectedVal={monthVal} />
+          <MonthsDropDown val_data={Months} onchanged_value={getMonthVal} selectedVal={monthVal} selectedLabel={monthLabel}/>
     <Icon name="plus" size={30} style={styles.plus_icon} onPress={handleAddPurchases} />
     <Text style={styles.plus_icon}>Add Purchase</Text>
     </View>):(<View></View>)}
